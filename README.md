@@ -1,4 +1,4 @@
-This projects makes Jim Breen's JMDict-related files available in JSON format in UTF-8 encoding. Why? Many of the files are still stored as flat files in EUC-JP or JIS X encodings, rendering them difficult to work with.
+This projects makes Jim Breen's JMDict-related files available in JSON format in UTF-8 encoding.
 
 See `json-output` folder for the JSON files.
 
