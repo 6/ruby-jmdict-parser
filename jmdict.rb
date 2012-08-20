@@ -3,6 +3,7 @@
 class JapaneseDeinflector
   def initialize(fpath)
     @rules = []
+    @reasons = []
     parse(fpath)
   end
 
@@ -19,7 +20,7 @@ class JapaneseDeinflector
         next  if new_word.empty? || possibilities.include?(new_word)
         # Weight is between 0 and 1, 1 being a higher chance of actual deinflection
         weight = (Float(size) / word.size).round(3)
-        possibilities << {weight: weight, word: new_word}
+        possibilities << {weight: weight, word: new_word, reason: rule[:reason]}
       end
     end
     possibilities
@@ -28,7 +29,6 @@ class JapaneseDeinflector
   private
 
   def parse(fpath)
-    reasons = []
     prev_from_size = nil
     rules_hash = {}
     File.open(fpath).each_with_index do |line, i|
@@ -36,7 +36,7 @@ class JapaneseDeinflector
       parts = line.strip.split(/\t/)
       # Reasons are listed at the top of the file and are not tab-separated
       if parts.size == 1
-        reasons << parts[0]
+        @reasons << parts[0]
       # Rules are tab-separated in the following format:
       # <from>\t<to>\t<type>\t<reason_index>
       else
@@ -47,7 +47,7 @@ class JapaneseDeinflector
           :from => from,
           :to => to,
           :type => type,
-          :reason => reasons[reasons_index]
+          :reason => @reasons[reasons_index]
         }
       end
     end
